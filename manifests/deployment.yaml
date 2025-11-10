@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: contoso-air
+  name: contoso-air-2
   labels:
-    app.kubernetes.io/name: contoso-air
+    app.kubernetes.io/name: contoso-air-2
     kubernetes.azure.com/generator: devhub
   namespace: dev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: contoso-air
+      app.kubernetes.io/name: contoso-air-2
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: contoso-air
+        app.kubernetes.io/name: contoso-air-2
     spec:
       containers:
-        - name: contoso-air
-          image: myregistryai7d.azurecr.io/contoso-air:latest
+        - name: contoso-air-2
+          image: myregistryai7d.azurecr.io/image-workflow-1762805268926:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 3000
+            - containerPort: 80
           resources:
             requests:
               cpu: "0.5"
@@ -31,16 +31,16 @@ spec:
               memory: "1Gi"
           envFrom:
             - configMapRef:
-                name: contoso-air-config
+                name: contoso-air-2-config
             - secretRef:
                 name: secret-ref
                 optional: true
           livenessProbe:
             tcpSocket:
-              port: 3000
+              port: 80
           readinessProbe:
             tcpSocket:
-              port: 3000
+              port: 80
             periodSeconds: 5
             timeoutSeconds: 5
             failureThreshold: 1
@@ -48,7 +48,7 @@ spec:
             initialDelaySeconds: 3
           startupProbe:
             tcpSocket:
-              port: 3000
+              port: 80
             periodSeconds: 10
             timeoutSeconds: 1
             failureThreshold: 3
@@ -83,11 +83,11 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app.kubernetes.io/name: contoso-air
+                  app.kubernetes.io/name: contoso-air-2
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
           whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
-              app.kubernetes.io/name: contoso-air
+              app.kubernetes.io/name: contoso-air-2
